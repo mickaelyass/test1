@@ -1,34 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
-const DrumPad = ({ letter, soundUrl, displayText,handleDisplay }) => {
+const DrumPad = ({ letter, soundUrl, displayText, handleDisplay }) => {
 
-  // Fonction pour jouer le son
-  const playSound = () => {
+  const playSound = useCallback(() => {
     const audio = document.getElementById(letter);
-    audio.play();
-    handleDisplay(displayText);
-  };
+    if (audio) {
+      audio.currentTime = 0; // Pour rejouer immédiatement si déjà joué
+      audio.play();
+      handleDisplay(displayText);
+    }
+  }, [letter, displayText, handleDisplay]);
 
-  // Ecoute du clavier
   useEffect(() => {
     const handleKeydown = (event) => {
       if (event.key.toUpperCase() === letter) {
         playSound();
-        
       }
     };
 
     window.addEventListener("keydown", handleKeydown);
 
-    // Nettoyage de l'écouteur quand le composant est démonté
     return () => {
       window.removeEventListener("keydown", handleKeydown);
     };
-  }, [letter]);
+  }, [letter, playSound]);
 
   return (
-    <button className="drum-pad w-10 h-10 bg-red-400" id={displayText} 
-    onClick={playSound}>{letter}
+    <button
+      className="drum-pad w-10 h-10 bg-red-400"
+      id={displayText}
+      onClick={playSound}
+    >
+      {letter}
       <audio id={letter} src={soundUrl} className="clip"></audio>
     </button>
   );
