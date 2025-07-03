@@ -16,14 +16,15 @@ const Home = () => {
 
     // Empêcher plusieurs zéros en début de nombre
     if (value === "0") {
-      const parts = display.split(/[\+\-\*\/]/);
+      const parts = display.split(/[+\-*/]/);
       const lastPart = parts[parts.length - 1];
       if (lastPart === "0") return;
     }
 
     // Empêcher deux décimales dans le même nombre
     if (value === ".") {
-      const parts = display.split(/[\+\-\*\/]/);
+      const parts = display.split(/[+\-*/]/
+);
       const lastPart = parts[parts.length - 1];
       if (lastPart.includes(".")) return;
     }
@@ -31,7 +32,7 @@ const Home = () => {
     // Gérer plusieurs opérateurs consécutifs
     if ("+-*/".includes(value)) {
       const lastChar = display[display.length - 1];
-      const secondLastChar = display[display.length - 2];
+      //const secondLastChar = display[display.length - 2];
 
       if ("+-*/".includes(lastChar)) {
         // autoriser *- ou /- (pour les nombres négatifs)
